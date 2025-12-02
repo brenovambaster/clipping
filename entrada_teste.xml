@@ -1,0 +1,122 @@
+<?xml version="1.0" ?>
+<!-- Arquivo de teste para TP2 - Sistema Gráfico com Clipping -->
+<dados>
+	<!-- Viewport: janela de visualização de 800x600 (4:3) --> 
+	<viewport>
+		<vpmin x="0" y="0"/>
+		<vpmax x="800" y="600"/>
+	</viewport>
+	
+	<!-- Window: região do mundo visível -->
+	<window>
+		<!-- Mantém mesma razão de aspecto da viewport -->
+		<wmin x="0.0" y="0.0"/>
+		<wmax x="10.0" y="7.5"/>
+	</window>
+
+	<!-- ========== PONTOS ========== -->
+	<!-- Pontos dispersos para testar clipping -->
+	<ponto cor="black" x="0.5" y="2.0"/>
+	<ponto cor="darkred" x="2.0" y="4.0"/>
+	<ponto cor="darkblue" x="4.0" y="6.0"/>
+	<ponto cor="darkgreen" x="8.0" y="3.0"/>
+	<ponto cor="purple" x="5.0" y="1.0"/>
+	<ponto cor="orange" x="9.5" y="7.0"/>
+
+	<!-- ========== RETAS ========== -->
+	<!-- Reta diagonal azul (dentro da window) -->
+	<reta cor="blue">
+		<ponto x="2.0" y="2.0"/>
+		<ponto x="4.0" y="4.0"/>
+	</reta>
+
+	<!-- Reta verde (cruza window) -->
+	<reta cor="green">
+		<ponto x="4.0" y="4.0"/>
+		<ponto x="2.0" y="6.0"/>
+	</reta>
+
+	<!-- Reta vermelha horizontal -->
+	<reta cor="red">
+		<ponto x="1.0" y="3.5"/>
+		<ponto x="9.0" y="3.5"/>
+	</reta>
+
+	<!-- Reta cyan vertical -->
+	<reta cor="cyan">
+		<ponto x="5.0" y="0.5"/>
+		<ponto x="5.0" y="7.0"/>
+	</reta>
+
+	<!-- Reta amarela diagonal (atravessa window) -->
+	<reta cor="gold">
+		<ponto x="-1.0" y="-1.0"/>
+		<ponto x="11.0" y="8.5"/>
+	</reta>
+
+	<!-- ========== POLÍGONOS ========== -->
+	<!-- Triângulo vermelho (dentro da window) -->
+	<poligono cor="red">
+		<ponto x="6.0" y="5.0"/>
+		<ponto x="8.0" y="5.0"/>
+		<ponto x="7.0" y="6.5"/>
+	</poligono>
+
+	<!-- Quadrado azul (parcialmente fora) -->
+	<poligono cor="blue">
+		<ponto x="0.5" y="0.5"/>
+		<ponto x="2.5" y="0.5"/>
+		<ponto x="2.5" y="2.5"/>
+		<ponto x="0.5" y="2.5"/>
+	</poligono>
+
+	<!-- Pentágono verde (cruzando borda superior) -->
+	<poligono cor="darkgreen">
+		<ponto x="7.0" y="6.0"/>
+		<ponto x="8.5" y="6.5"/>
+		<ponto x="8.8" y="8.0"/>
+		<ponto x="7.0" y="8.5"/>
+		<ponto x="5.5" y="7.5"/>
+	</poligono>
+
+	<!-- Losango laranja (centro da window) -->
+	<poligono cor="orange">
+		<ponto x="5.0" y="3.0"/>
+		<ponto x="6.0" y="4.0"/>
+		<ponto x="5.0" y="5.0"/>
+		<ponto x="4.0" y="4.0"/>
+	</poligono>
+
+	<!-- Triângulo grande magenta (atravessa toda window) -->
+	<poligono cor="magenta">
+		<ponto x="1.0" y="1.0"/>
+		<ponto x="9.0" y="2.0"/>
+		<ponto x="5.0" y="7.0"/>
+	</poligono>
+
+	<!-- Hexágono roxo irregular -->
+	<poligono cor="purple">
+		<ponto x="2.0" y="5.0"/>
+		<ponto x="3.0" y="4.5"/>
+		<ponto x="3.5" y="5.5"/>
+		<ponto x="3.0" y="6.5"/>
+		<ponto x="2.0" y="6.5"/>
+		<ponto x="1.5" y="5.5"/>
+	</poligono>
+
+	<!-- Casa (polígono complexo) -->
+	<poligono cor="brown">
+		<ponto x="7.5" y="1.0"/>
+		<ponto x="9.5" y="1.0"/>
+		<ponto x="9.5" y="3.0"/>
+		<ponto x="7.5" y="3.0"/>
+	</poligono>
+
+	<!-- Telhado da casa -->
+	<poligono cor="darkred">
+		<ponto x="7.0" y="3.0"/>
+		<ponto x="8.5" y="4.5"/>
+		<ponto x="10.0" y="3.0"/>
+	</poligono>
+
+</dados>
