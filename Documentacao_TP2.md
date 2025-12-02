@@ -1,6 +1,58 @@
 # Trabalho Prático 2 - Sistema Gráfico com Clipping
 ## Computação Gráfica - 2025
 
+- [Trabalho Prático 2 - Sistema Gráfico com Clipping](#trabalho-prático-2---sistema-gráfico-com-clipping)
+  - [Computação Gráfica - 2025](#computação-gráfica---2025)
+  - [1. Introdução](#1-introdução)
+  - [2. Fundamentação Teórica](#2-fundamentação-teórica)
+    - [2.1 Pipeline Gráfico](#21-pipeline-gráfico)
+    - [2.2 Transformações Geométricas com NumPy](#22-transformações-geométricas-com-numpy)
+    - [2.3 Algoritmos de Clipping](#23-algoritmos-de-clipping)
+      - [Cohen-Sutherland (Retas)](#cohen-sutherland-retas)
+      - [Liang-Barsky (Retas)](#liang-barsky-retas)
+      - [Sutherland-Hodgman (Polígonos)](#sutherland-hodgman-polígonos)
+  - [3. Arquitetura do Sistema](#3-arquitetura-do-sistema)
+    - [3.1 Estrutura Modular de Arquivos](#31-estrutura-modular-de-arquivos)
+    - [3.2 Diagrama de Classes](#32-diagrama-de-classes)
+    - [3.3 Descrição dos Módulos](#33-descrição-dos-módulos)
+      - [`main.py` - Ponto de Entrada](#mainpy---ponto-de-entrada)
+      - [`geometric_objects.py` - Objetos Geométricos](#geometric_objectspy---objetos-geométricos)
+      - [`transformations.py` - Transformações com NumPy](#transformationspy---transformações-com-numpy)
+      - [`clipping_interface.py` - Interfaces Abstratas](#clipping_interfacepy---interfaces-abstratas)
+  - [4. Guia de Uso](#4-guia-de-uso)
+    - [4.1 Instalação](#41-instalação)
+    - [4.2 Carregando Arquivos XML](#42-carregando-arquivos-xml)
+    - [4.3 Controles da Window](#43-controles-da-window)
+      - [Movimentação](#movimentação)
+      - [Rotação](#rotação)
+      - [Zoom](#zoom)
+    - [4.4 Algoritmos de Clipping](#44-algoritmos-de-clipping)
+  - [5. Decisões de Implementação](#5-decisões-de-implementação)
+    - [5.1 Estrutura de Dados](#51-estrutura-de-dados)
+    - [5.2 Transformação Mundo → PPC com NumPy](#52-transformação-mundo--ppc-com-numpy)
+    - [5.3 Movimentação com Rotação](#53-movimentação-com-rotação)
+    - [5.4 Clipping de Polígonos](#54-clipping-de-polígonos)
+    - [5.5 Uso de Interfaces Abstratas (ABC)](#55-uso-de-interfaces-abstratas-abc)
+    - [5.6 Visualização da Window](#56-visualização-da-window)
+  - [6. Testes Realizados](#6-testes-realizados)
+    - [6.1 Arquivo de Teste: entrada.xml](#61-arquivo-de-teste-entradaxml)
+    - [6.2 Testes de Módulos](#62-testes-de-módulos)
+    - [6.3 Casos Especiais Testados](#63-casos-especiais-testados)
+  - [7. Exemplos de Uso](#7-exemplos-de-uso)
+    - [7.1 Explorar uma Cena Grande](#71-explorar-uma-cena-grande)
+    - [7.2 Comparar Algoritmos](#72-comparar-algoritmos)
+    - [7.3 Testar Rotação](#73-testar-rotação)
+  - [8. Cores Suportadas](#8-cores-suportadas)
+  - [9. Melhorias Implementadas](#9-melhorias-implementadas)
+    - [9.1 Uso de NumPy para Operações Matriciais](#91-uso-de-numpy-para-operações-matriciais)
+    - [9.2 Arquitetura Modular](#92-arquitetura-modular)
+    - [9.3 Interfaces Abstratas (ABC)](#93-interfaces-abstratas-abc)
+    - [9.4 Tipagem Estática](#94-tipagem-estática)
+  - [10. Limitações Conhecidas](#10-limitações-conhecidas)
+  - [11. Possíveis Extensões](#11-possíveis-extensões)
+  - [12. Conclusão](#12-conclusão)
+  - [13. Referências](#13-referências)
+
 ---
 
 ## 1. Introdução
@@ -356,13 +408,13 @@ Isso permite trocar facilmente entre algoritmos de clipping.
 
 ### 6.2 Testes de Módulos
 
-| Módulo               | Teste                          | Status |
-| -------------------- | ------------------------------ | ------ |
-| geometric_objects.py | Criação de objetos             | ✅ OK   |
-| transformations.py   | Matrizes NumPy corretas        | ✅ OK   |
-| clipping_algorithms  | Interfaces implementadas       | ✅ OK   |
-| xml_loader.py        | Parsing de XML                 | ✅ OK   |
-| graphics_system.py   | Pipeline completo              | ✅ OK   |
+| Módulo               | Teste                    | Status |
+| -------------------- | ------------------------ | ------ |
+| geometric_objects.py | Criação de objetos       | ✅ OK   |
+| transformations.py   | Matrizes NumPy corretas  | ✅ OK   |
+| clipping_algorithms  | Interfaces implementadas | ✅ OK   |
+| xml_loader.py        | Parsing de XML           | ✅ OK   |
+| graphics_system.py   | Pipeline completo        | ✅ OK   |
 
 ### 6.3 Casos Especiais Testados
 
