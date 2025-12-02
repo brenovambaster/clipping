@@ -1,14 +1,18 @@
 # Sistema Gráfico com Clipping - TP2
 
-Sistema gráfico 2D com transformações geométricas e algoritmos de clipping implementado em Python.
+Sistema gráfico 2D com transformações geométricas e algoritmos de clipping implementado em Python com arquitetura modular, NumPy e interfaces abstratas.
 
 ## 🚀 Como Executar
 
 ```bash
-python sistema_grafico_tp2.py
+# Instalar dependências
+pip install -r requirements.txt
+
+# Executar
+python main.py
 ```
 
-**Requisitos**: Python 3.7+ com Tkinter
+**Requisitos**: Python 3.7+ com NumPy e Tkinter
 
 ## 📖 Uso Rápido
 
@@ -36,18 +40,36 @@ Escolha o algoritmo de clipping para retas:
 - ⚪ **Cohen-Sutherland** (clássico)
 - ⚪ **Liang-Barsky** (eficiente)
 
-*Polígonos usam automaticamente Weiler-Atherton*
+*Polígonos usam automaticamente Sutherland-Hodgman*
 
-## 📁 Arquivos Incluídos
+## 📁 Arquitetura Modular
 
 ```
-TP2/
-├── sistema_grafico_tp2.py      # Código principal
-├── entrada_teste.xml            # Arquivo XML de teste completo
-├── entrada (1).xml              # Arquivo XML original fornecido
-├── Documentacao_TP2.md          # Documentação detalhada
-└── README.md                    # Este arquivo
+clipping/
+├── main.py                  # Ponto de entrada da aplicação
+├── graphics_system.py       # Sistema gráfico principal (SistemaGrafico)
+├── geometric_objects.py     # Classes de objetos (Ponto, Reta, Poligono)
+├── transformations.py       # Operações de transformação com NumPy
+├── clipping_algorithms.py   # Implementações dos algoritmos de clipping
+├── clipping_interface.py    # Interfaces abstratas (ABC)
+├── xml_loader.py            # Carregador de arquivos XML
+├── entrada_teste.xml        # Arquivo de teste
+├── requirements.txt         # Dependências (numpy)
+├── Documentacao_TP2.md      # Documentação detalhada
+└── README.md                # Este arquivo
 ```
+
+### Descrição dos Módulos
+
+| Módulo                   | Responsabilidade                                                              |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| `main.py`                | Ponto de entrada, inicializa a aplicação                                      |
+| `graphics_system.py`     | Classe `SistemaGrafico` - pipeline de visualização                            |
+| `geometric_objects.py`   | Classes `Ponto`, `Reta`, `Poligono` com coords NumPy                          |
+| `transformations.py`     | Classe `Transformacao` - matrizes homogêneas 3x3                              |
+| `clipping_algorithms.py` | `ClippingCohenSutherland`, `ClippingLiangBarsky`, `ClippingSutherlandHodgman` |
+| `clipping_interface.py`  | Interfaces abstratas `ClippingAlgorithmReta`, `ClippingAlgorithmPoligono`     |
+| `xml_loader.py`          | Classe `XMLLoader` - parsing de arquivos XML                                  |
 
 ## 🎨 Formato do XML
 
@@ -86,10 +108,17 @@ TP2/
 ✅ Clipping de pontos, retas e polígonos  
 ✅ Cohen-Sutherland para retas  
 ✅ Liang-Barsky para retas  
-✅ Weiler-Atherton para polígonos  
+✅ Sutherland-Hodgman para polígonos  
 ✅ Interface gráfica intuitiva  
 ✅ Suporte a cores X11  
 ✅ Visualização da área de clipping (bordas da window)  
+
+### Melhorias de Arquitetura
+
+✅ **NumPy** para operações matriciais eficientes  
+✅ **Arquitetura modular** com separação de responsabilidades  
+✅ **Interfaces abstratas (ABC)** para extensibilidade  
+✅ **Type hints** para documentação e segurança de tipos  
 
 ## 🧪 Testes Sugeridos
 
@@ -122,13 +151,13 @@ O painel lateral mostra:
 ### Clipping
 - Pontos: teste simples de inclusão
 - Retas: escolha entre 2 algoritmos
-- Polígonos: Sutherland-Hodgman (base para Weiler-Atherton)
+- Polígonos: Sutherland-Hodgman
 
 ## 🐛 Problemas Conhecidos
 
 - Performance pode ser afetada com 1000+ objetos
 - Erros de ponto flutuante podem acumular após muitas rotações
-- Weiler-Atherton simplificado pode não gerar múltiplos polígonos em casos muito complexos
+- Sutherland-Hodgman pode não gerar múltiplos polígonos em casos muito complexos
 
 ## 📚 Documentação Completa
 
@@ -136,10 +165,12 @@ Veja `Documentacao_TP2.md` para:
 - Fundamentação teórica detalhada
 - Explicação de cada algoritmo
 - Diagramas de arquitetura
+- Uso de NumPy para matrizes
+- Interfaces abstratas (ABC)
 - Mais exemplos de uso
 - Referências bibliográficas
 
-## 👤 Autor
+## 👤 Autores
 
 - Artur Neto
 - Breno Vambaster

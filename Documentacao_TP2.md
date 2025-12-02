@@ -5,7 +5,9 @@
 
 ## 1. Introdução
 
-Este trabalho implementa um **sistema gráfico 2D completo** em Python com Tkinter, capaz de realizar transformações geométricas na window e aplicar algoritmos de clipping (recorte) para visualização de objetos geométricos.
+Este trabalho implementa um **sistema gráfico 2D completo** em Python com Tkinter e NumPy, capaz de realizar transformações geométricas na window e aplicar algoritmos de clipping (recorte) para visualização de objetos geométricos.
+
+O sistema foi desenvolvido seguindo **boas práticas de engenharia de software**, com arquitetura modular, uso de interfaces abstratas (ABC), tipagem estática e operações matriciais otimizadas com NumPy.
 
 O sistema permite:
 - Carregar cenas de arquivos XML
@@ -26,29 +28,35 @@ O sistema implementa o pipeline gráfico clássico:
 2. **Clipping**: Recorte dos objetos para a área visível
 3. **PPC → Viewport**: Mapeamento para o espaço de tela
 
-### 2.2 Transformações Geométricas
+### 2.2 Transformações Geométricas com NumPy
 
-Utilizamos matrizes de transformação homogêneas 3x3:
+Utilizamos matrizes de transformação homogêneas 3x3 implementadas com `numpy.ndarray`:
 
 **Translação:**
-```
-[1  0  tx]
-[0  1  ty]
-[0  0   1]
+```python
+np.array([
+    [1, 0, tx],
+    [0, 1, ty],
+    [0, 0, 1]
+], dtype=float)
 ```
 
 **Rotação:**
-```
-[cos(θ)  -sin(θ)  0]
-[sin(θ)   cos(θ)  0]
-[  0        0     1]
+```python
+np.array([
+    [cos(θ), -sin(θ), 0],
+    [sin(θ),  cos(θ), 0],
+    [0,       0,      1]
+], dtype=float)
 ```
 
 **Escala:**
-```
-[sx  0   0]
-[0   sy  0]
-[0   0   1]
+```python
+np.array([
+    [sx, 0,  0],
+    [0,  sy, 0],
+    [0,  0,  1]
+], dtype=float)
 ```
 
 ### 2.3 Algoritmos de Clipping
@@ -63,8 +71,8 @@ Utilizamos matrizes de transformação homogêneas 3x3:
 - Mais eficiente que Cohen-Sutherland
 - Calcula interseções diretamente com limites
 
-#### Weiler-Atherton (Polígonos)
-- Implementado usando Sutherland-Hodgman simplificado
+#### Sutherland-Hodgman (Polígonos)
+- Implementação baseada em clipping sequencial por borda
 - Funciona com polígonos convexos e côncavos
 - Pode gerar múltiplos polígonos como resultado
 
@@ -72,49 +80,95 @@ Utilizamos matrizes de transformação homogêneas 3x3:
 
 ## 3. Arquitetura do Sistema
 
-### 3.1 Estrutura de Classes
+### 3.1 Estrutura Modular de Arquivos
+
+O projeto foi organizado em **módulos separados** para melhor manutenibilidade:
 
 ```
-Sistema Gráfico
-├── Objetos Geométricos
-│   ├── Ponto (coordenadas mundo + PPC, cor, visibilidade)
-│   ├── Reta (2 pontos mundo + PPC, cor, visibilidade)
-│   └── Polígono (lista de pontos mundo + PPC, cor, visibilidade)
-│
-├── Transformações
-│   ├── translacao()
-│   ├── rotacao()
-│   ├── escala()
-│   └── multiplicar_matrizes()
-│
-├── Algoritmos de Clipping
-│   ├── ClippingCohenSutherland
-│   ├── ClippingLiangBarsky
-│   └── ClippingWeilerAtherton
-│
-└── Interface Gráfica
-    ├── Canvas (viewport)
-    └── Controles (movimentação, rotação, escala)
+clipping/
+├── main.py                  # Ponto de entrada da aplicação
+├── graphics_system.py       # Sistema gráfico principal (SistemaGrafico)
+├── geometric_objects.py     # Classes de objetos (Ponto, Reta, Poligono)
+├── transformations.py       # Operações de transformação (Transformacao)
+├── clipping_algorithms.py   # Algoritmos de clipping
+├── clipping_interface.py    # Interfaces abstratas (ABC)
+├── xml_loader.py            # Carregador de arquivos XML
+├── entrada_teste.xml        # Arquivo de teste
+├── requirements.txt         # Dependências do projeto
+└── README.md                # Documentação resumida
 ```
 
-### 3.2 Objetos Geométricos
+### 3.2 Diagrama de Classes
+![](clipping-png.png)
 
+### 3.3 Descrição dos Módulos
+
+#### `main.py` - Ponto de Entrada
+```python
+def main():
+    root = tk.Tk()
+    app = SistemaGrafico(root)
+    root.mainloop()
+```
+
+#### `geometric_objects.py` - Objetos Geométricos
 Cada objeto mantém:
 - **Coordenadas originais** no sistema de coordenadas do mundo
 - **Coordenadas transformadas** no PPC (após aplicar transformações da window)
 - **Atributo de visibilidade** (True/False após clipping)
 - **Cor** para renderização
+- **Métodos NumPy** para manipulação de coordenadas homogêneas
 
-**Exemplo - Classe Ponto:**
 ```python
 class Ponto:
-    def __init__(self, x, y, cor="black"):
-        self.x_mundo = x      # Original
+    def __init__(self, x: float, y: float, cor: str = "black"):
+        self.x_mundo = x
         self.y_mundo = y
-        self.x_ppc = x        # Transformado
+        self.x_ppc = x
         self.y_ppc = y
         self.cor = cor
         self.visivel = True
+    
+    def get_coords_mundo(self) -> np.ndarray:
+        """Retorna coordenadas do mundo como vetor homogêneo"""
+        return np.array([self.x_mundo, self.y_mundo, 1.0])
+```
+
+#### `transformations.py` - Transformações com NumPy
+```python
+class Transformacao:
+    @staticmethod
+    def translacao(tx: float, ty: float) -> np.ndarray:
+        return np.array([[1, 0, tx], [0, 1, ty], [0, 0, 1]], dtype=float)
+    
+    @staticmethod
+    def rotacao(angulo_graus: float) -> np.ndarray:
+        ang = math.radians(angulo_graus)
+        return np.array([
+            [math.cos(ang), -math.sin(ang), 0],
+            [math.sin(ang),  math.cos(ang), 0],
+            [0, 0, 1]
+        ], dtype=float)
+    
+    @staticmethod
+    def compor_transformacoes(*matrizes: np.ndarray) -> np.ndarray:
+        resultado = np.eye(3)
+        for matriz in matrizes:
+            resultado = matriz @ resultado
+        return resultado
+```
+
+#### `clipping_interface.py` - Interfaces Abstratas
+```python
+class ClippingAlgorithmReta(ABC):
+    @abstractmethod
+    def clip(self, x1, y1, x2, y2, x_min, y_min, x_max, y_max) -> Optional[Tuple]:
+        pass
+
+class ClippingAlgorithmPoligono(ABC):
+    @abstractmethod
+    def clip(self, poligono, x_min, y_min, x_max, y_max) -> List[List[Tuple]]:
+        pass
 ```
 
 ---
@@ -125,11 +179,17 @@ class Ponto:
 
 **Requisitos:**
 - Python 3.7 ou superior
+- NumPy
 - Tkinter (normalmente já incluído no Python)
+
+**Instalação das dependências:**
+```bash
+pip install -r requirements.txt
+```
 
 **Execução:**
 ```bash
-python sistema_grafico_tp2.py
+python main.py
 ```
 
 ### 4.2 Carregando Arquivos XML
@@ -188,7 +248,7 @@ Escolha o algoritmo para retas:
 - ⚪ **Cohen-Sutherland**: Clássico, divide espaço em regiões
 - ⚪ **Liang-Barsky**: Mais eficiente, usa equações paramétricas
 
-*Polígonos sempre usam Weiler-Atherton*
+*Polígonos sempre usam Sutherland-Hodgman*
 
 ---
 
@@ -205,29 +265,25 @@ Escolha o algoritmo para retas:
 - Após clipping, um polígono pode ser dividido em várias partes
 - Mantém informação completa do resultado do recorte
 
-### 5.2 Transformação Mundo → PPC
+### 5.2 Transformação Mundo → PPC com NumPy
 
-O processo implementado:
-1. Transladar window para origem (subtrair centro)
-2. Aplicar rotação inversa da window
-3. Transladar de volta
-4. Normalizar para intervalo da window
+O processo implementado utiliza composição de matrizes NumPy:
 
 ```python
 def transformar_mundo_para_ppc(self):
-    # Translação para origem
+    # Compor transformações usando NumPy
     t1 = Transformacao.translacao(-self.w_centro_x, -self.w_centro_y)
-    
-    # Rotação inversa
     r = Transformacao.rotacao(-self.w_angulo)
-    
-    # Translação de volta
     t2 = Transformacao.translacao(self.w_centro_x, self.w_centro_y)
     
-    # Combinar e aplicar
-    matriz = t1
-    matriz = multiplicar_matrizes(r, matriz)
-    matriz = multiplicar_matrizes(t2, matriz)
+    # Multiplicação matricial eficiente com operador @
+    matriz = Transformacao.compor_transformacoes(t2, r, t1)
+    
+    # Aplicar transformação a cada ponto
+    for ponto in self.pontos:
+        coords = ponto.get_coords_mundo()  # np.array([x, y, 1])
+        resultado = Transformacao.aplicar_transformacao(coords, matriz)
+        ponto.set_coords_ppc(resultado)
 ```
 
 ### 5.3 Movimentação com Rotação
@@ -246,13 +302,28 @@ def mover_window(self, dx, dy):
 
 ### 5.4 Clipping de Polígonos
 
-Implementamos **Sutherland-Hodgman** como base para Weiler-Atherton:
-- Mais simples de implementar
-- Funciona bem para polígonos convexos
-- Para côncavos, gera aproximação adequada
+Implementamos **Sutherland-Hodgman** para clipping de polígonos:
+- Mais simples de implementar e eficiente
+- Funciona bem para polígonos convexos e côncavos
 - Clipa contra cada borda sequencialmente
+- Implementa a interface abstrata `ClippingAlgorithmPoligono`
 
-### 5.5 Visualização da Window
+### 5.5 Uso de Interfaces Abstratas (ABC)
+
+O sistema utiliza o padrão de projeto **Strategy** através de interfaces abstratas:
+
+```python
+from abc import ABC, abstractmethod
+
+class ClippingAlgorithmReta(ABC):
+    @abstractmethod
+    def clip(self, x1, y1, x2, y2, x_min, y_min, x_max, y_max):
+        pass
+```
+
+Isso permite trocar facilmente entre algoritmos de clipping.
+
+### 5.6 Visualização da Window
 
 - Bordas da window são desenhadas como **linhas tracejadas vermelhas**
 - Permite visualizar a área de clipping
@@ -283,7 +354,17 @@ Implementamos **Sutherland-Hodgman** como base para Weiler-Atherton:
 | Liang-Barsky     | Mesmo resultado que CS         | ✅ OK   |
 | Polígono parcial | Polígono cortado mantém forma  | ✅ OK   |
 
-### 6.2 Casos Especiais Testados
+### 6.2 Testes de Módulos
+
+| Módulo               | Teste                          | Status |
+| -------------------- | ------------------------------ | ------ |
+| geometric_objects.py | Criação de objetos             | ✅ OK   |
+| transformations.py   | Matrizes NumPy corretas        | ✅ OK   |
+| clipping_algorithms  | Interfaces implementadas       | ✅ OK   |
+| xml_loader.py        | Parsing de XML                 | ✅ OK   |
+| graphics_system.py   | Pipeline completo              | ✅ OK   |
+
+### 6.3 Casos Especiais Testados
 
 1. **Reta completamente fora**: visivel = False
 2. **Reta parcialmente dentro**: cortada corretamente
@@ -336,10 +417,33 @@ Lista completa: [X11 Color Names](https://en.wikipedia.org/wiki/X11_color_names)
 
 ---
 
-## 9. Limitações Conhecidas
+## 9. Melhorias Implementadas
 
-1. **Weiler-Atherton Simplificado**: 
-   - Implementação usa Sutherland-Hodgman como base
+### 9.1 Uso de NumPy para Operações Matriciais
+- Operações vetorizadas mais eficientes
+- Uso do operador `@` para multiplicação de matrizes
+- Coordenadas homogêneas como `np.ndarray`
+
+### 9.2 Arquitetura Modular
+- Separação de responsabilidades em arquivos distintos
+- Facilita manutenção e testes unitários
+- Permite reutilização de componentes
+
+### 9.3 Interfaces Abstratas (ABC)
+- Padrão Strategy para algoritmos de clipping
+- Fácil adição de novos algoritmos
+- Type hints para melhor documentação do código
+
+### 9.4 Tipagem Estática
+- Uso de `typing` para anotações de tipo
+- Melhor documentação e detecção de erros
+- Compatível com ferramentas como mypy
+
+---
+
+## 10. Limitações Conhecidas
+
+1. **Sutherland-Hodgman**: 
    - Pode não gerar múltiplos polígonos em casos complexos de côncavos
 
 2. **Performance**: 
@@ -352,7 +456,7 @@ Lista completa: [X11 Color Names](https://en.wikipedia.org/wiki/X11_color_names)
 
 ---
 
-## 10. Possíveis Extensões
+## 11. Possíveis Extensões
 
 - **Zoom com mouse wheel**: Mais intuitivo que botões
 - **Pan com arrastar**: Movimentação ao arrastar canvas
@@ -360,30 +464,36 @@ Lista completa: [X11 Color Names](https://en.wikipedia.org/wiki/X11_color_names)
 - **Animação**: Interpolar transformações suavemente
 - **Exportar imagem**: Salvar viewport como PNG
 - **Editor interativo**: Criar/editar objetos com mouse
+- **Novos algoritmos**: Adicionar novos algoritmos implementando as interfaces
 
 ---
 
-## 11. Conclusão
+## 12. Conclusão
 
 O sistema implementado atende completamente aos requisitos do TP2:
 
 ✅ Movimentação livre da window (translação, rotação, escala)  
-✅ Transformação Mundo → PPC implementada corretamente  
+✅ Transformação Mundo → PPC implementada corretamente com NumPy  
 ✅ Clipping de pontos, retas (2 algoritmos) e polígonos  
 ✅ Interface intuitiva com controles claros  
 ✅ Objetos mantêm informações originais e transformadas  
 ✅ Leitura de arquivos XML com cores  
 ✅ Documentação completa e clara  
+✅ **Arquitetura modular com separação de responsabilidades**  
+✅ **Uso de NumPy para operações matriciais eficientes**  
+✅ **Interfaces abstratas (ABC) para extensibilidade**  
+✅ **Tipagem estática com type hints**  
 
-O código está organizado, comentado e segue boas práticas de programação Python. A arquitetura orientada a objetos facilita manutenção e extensões futuras.
+O código está organizado, comentado e segue boas práticas de programação Python. A arquitetura orientada a objetos e modular facilita manutenção e extensões futuras.
 
 ---
 
-## 12. Referências
+## 13. Referências
 
 - FOLEY, J. D. et al. **Computer Graphics: Principles and Practice**. 2nd ed. Addison-Wesley, 1990.
 - HEARN, D.; BAKER, M. P. **Computer Graphics with OpenGL**. 4th ed. Prentice Hall, 2010.
 - Documentação Python Tkinter: https://docs.python.org/3/library/tkinter.html
+- Documentação NumPy: https://numpy.org/doc/
 
 ---
 
