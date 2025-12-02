@@ -2,7 +2,32 @@
 
 Sistema gráfico 2D com transformações geométricas e algoritmos de clipping implementado em Python com arquitetura modular, NumPy e interfaces abstratas.
 
-## 🚀 Como Executar
+- [Sistema Gráfico com Clipping - TP2](#sistema-gráfico-com-clipping---tp2)
+  - [Como Executar](#como-executar)
+  - [Uso Rápido](#uso-rápido)
+    - [1. Carregar Cena](#1-carregar-cena)
+    - [2. Controles](#2-controles)
+      - [Movimentação](#movimentação)
+      - [Rotação](#rotação)
+      - [Zoom](#zoom)
+    - [3. Algoritmos](#3-algoritmos)
+  - [Arquitetura Modular](#arquitetura-modular)
+    - [Descrição dos Módulos](#descrição-dos-módulos)
+  - [Formato do XML](#formato-do-xml)
+  - [Recursos Implementados](#recursos-implementados)
+  - [Testes Sugeridos](#testes-sugeridos)
+  - [Informações em Tempo Real](#informações-em-tempo-real)
+  - [Decisões de Implementação](#decisões-de-implementação)
+    - [Estrutura de Dados](#estrutura-de-dados)
+    - [Transformações](#transformações)
+    - [Clipping](#clipping)
+  - [Problemas Conhecidos](#problemas-conhecidos)
+  - [Documentação Completa](#documentação-completa)
+  - [👤 Autores](#-autores)
+  - [📄 Licença](#-licença)
+
+
+##  Como Executar
 
 ```bash
 # Instalar dependências
@@ -14,7 +39,7 @@ python main.py
 
 **Requisitos**: Python 3.7+ com NumPy e Tkinter
 
-## 📖 Uso Rápido
+##  Uso Rápido
 
 ### 1. Carregar Cena
 - Clique em **"Carregar XML"**
@@ -42,7 +67,7 @@ Escolha o algoritmo de clipping para retas:
 
 *Polígonos usam automaticamente Sutherland-Hodgman*
 
-## 📁 Arquitetura Modular
+##  Arquitetura Modular
 
 ![](clipping-png.png)
 
@@ -73,7 +98,7 @@ clipping/
 | `clipping_interface.py`  | Interfaces abstratas `ClippingAlgorithmReta`, `ClippingAlgorithmPoligono`     |
 | `xml_loader.py`          | Classe `XMLLoader` - parsing de arquivos XML                                  |
 
-## 🎨 Formato do XML
+##  Formato do XML
 
 ```xml
 <?xml version="1.0"?>
@@ -103,7 +128,7 @@ clipping/
 </dados>
 ```
 
-## ✨ Recursos Implementados
+##  Recursos Implementados
 
 ✅ Transformações da window (translação, rotação, escala)  
 ✅ Pipeline completo: Mundo → PPC → Viewport  
@@ -115,14 +140,9 @@ clipping/
 ✅ Suporte a cores X11  
 ✅ Visualização da área de clipping (bordas da window)  
 
-### Melhorias de Arquitetura
 
-✅ **NumPy** para operações matriciais eficientes  
-✅ **Arquitetura modular** com separação de responsabilidades  
-✅ **Interfaces abstratas (ABC)** para extensibilidade  
-✅ **Type hints** para documentação e segurança de tipos  
 
-## 🧪 Testes Sugeridos
+##  Testes Sugeridos
 
 1. **Teste básico**: Carregue `entrada_teste.xml` e explore com os botões
 2. **Teste de movimento**: Use as setas para navegar pela cena
@@ -130,7 +150,7 @@ clipping/
 4. **Teste de zoom**: Amplie e reduza para ver diferentes escalas
 5. **Teste de algoritmos**: Alterne entre Cohen-Sutherland e Liang-Barsky
 
-## 📊 Informações em Tempo Real
+##  Informações em Tempo Real
 
 O painel lateral mostra:
 - Coordenadas da window (min, max, centro)
@@ -138,7 +158,7 @@ O painel lateral mostra:
 - Quantidade de objetos (total e visíveis)
 - Algoritmo de clipping selecionado
 
-## 🎯 Decisões de Implementação
+##  Decisões de Implementação
 
 ### Estrutura de Dados
 - Objetos mantêm coordenadas **originais** (mundo) e **transformadas** (PPC)
@@ -155,13 +175,13 @@ O painel lateral mostra:
 - Retas: escolha entre 2 algoritmos
 - Polígonos: Sutherland-Hodgman
 
-## 🐛 Problemas Conhecidos
+##  Problemas Conhecidos
 
 - Performance pode ser afetada com 1000+ objetos
 - Erros de ponto flutuante podem acumular após muitas rotações
 - Sutherland-Hodgman pode não gerar múltiplos polígonos em casos muito complexos
 
-## 📚 Documentação Completa
+##  Documentação Completa
 
 Veja `Documentacao_TP2.md` para:
 - Fundamentação teórica detalhada
