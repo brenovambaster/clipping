@@ -44,6 +44,8 @@ Escolha o algoritmo de clipping para retas:
 
 ## 📁 Arquitetura Modular
 
+![](clipping-png.png)
+
 ```
 clipping/
 ├── main.py                  # Ponto de entrada da aplicação
