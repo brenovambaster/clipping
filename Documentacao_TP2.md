@@ -511,18 +511,14 @@ Lista completa: [X11 Color Names](https://en.wikipedia.org/wiki/X11_color_names)
 ## 11. Possíveis Extensões
 
 - **Zoom com mouse wheel**: Mais intuitivo que botões
-- **Pan com arrastar**: Movimentação ao arrastar canvas
-- **Múltiplas janelas**: Visualizar mesma cena com diferentes windows
 - **Animação**: Interpolar transformações suavemente
 - **Exportar imagem**: Salvar viewport como PNG
-- **Editor interativo**: Criar/editar objetos com mouse
 - **Novos algoritmos**: Adicionar novos algoritmos implementando as interfaces
 
 ---
 
 ## 12. Conclusão
 
-O sistema implementado atende completamente aos requisitos do TP2:
 
 ✅ Movimentação livre da window (translação, rotação, escala)  
 ✅ Transformação Mundo → PPC implementada corretamente com NumPy  
@@ -531,12 +527,11 @@ O sistema implementado atende completamente aos requisitos do TP2:
 ✅ Objetos mantêm informações originais e transformadas  
 ✅ Leitura de arquivos XML com cores  
 ✅ Documentação completa e clara  
-✅ **Arquitetura modular com separação de responsabilidades**  
-✅ **Uso de NumPy para operações matriciais eficientes**  
-✅ **Interfaces abstratas (ABC) para extensibilidade**  
-✅ **Tipagem estática com type hints**  
+✅ Arquitetura modular com separação de responsabilidades  
+✅ Uso de NumPy para operações matriciais eficientes  
+✅ Interfaces abstratas (ABC) para extensibilidade
+✅ Tipagem estática com type hints  
 
-O código está organizado, comentado e segue boas práticas de programação Python. A arquitetura orientada a objetos e modular facilita manutenção e extensões futuras.
 
 ---
 

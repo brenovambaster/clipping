@@ -3,6 +3,7 @@
 Sistema gráfico 2D com transformações geométricas e algoritmos de clipping implementado em Python com arquitetura modular, NumPy e interfaces abstratas.
 
 - [Sistema Gráfico com Clipping - TP2](#sistema-gráfico-com-clipping---tp2)
+    - [Documentação](#documentação)
   - [Como Executar](#como-executar)
   - [Uso Rápido](#uso-rápido)
     - [1. Carregar Cena](#1-carregar-cena)
@@ -26,6 +27,10 @@ Sistema gráfico 2D com transformações geométricas e algoritmos de clipping i
   - [👤 Autores](#-autores)
   - [📄 Licença](#-licença)
 
+
+
+### Documentação
+> Leia em [Documentacao_TP2.md](./Documentacao_TP2.md) para detalhes completos 
 
 ##  Como Executar
 
@@ -196,7 +201,9 @@ Veja `Documentacao_TP2.md` para:
 
 - Artur Neto
 - Breno Vambaster
+
 IFNMG - Campus Montes Claros  
+
 Computação Gráfica - 2025
 
 ## 📄 Licença
