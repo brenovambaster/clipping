@@ -30,7 +30,7 @@ Sistema gráfico 2D com transformações geométricas e algoritmos de clipping i
 
 
 ### Documentação
-> Leia em [Documentacao_TP2.md](./Documentacao_TP2.md) para detalhes completos 
+> Leia em [Documentacao_TP2.md](./doc/Documentacao_TP2.md) para detalhes completos 
 
 ##  Como Executar
 
